@@ -1,4 +1,4 @@
--- SHane Business Rules
+-- Shane Business Rules
 
 -- You can only have one user who rents/owns the property at any given time.
 
