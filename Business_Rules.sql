@@ -12,8 +12,8 @@ If Exists (
     Join tblUSER U On U.UserID = PU.UserID
     Join tblEvent E On E.PropertyUserID = PU.PropertyUserID
     Join tblEvent_Type ET On ET.EventTypeID = E.EventTypeID
-  Where ET.EventTypeName = 'Purchase property'
-    Or  ET.EventTypeName = 'Rent property'
+  Where (ET.EventTypeName = 'Purchase property' Or ET.EventTypeName = 'Rent property')
+    And GETDATE() Between PU.BeginDate And PU.EndDate
   Group By P.PropertyID
   Having COUNT(Distinct U.UserID) > 1
 ) Set @Ret = 1
@@ -22,7 +22,7 @@ End
 
 Go
 
-Alter Table tblPROPERTY
+Alter Table tblEvent
 Add Constraint IsOccupiedByOnlyOne
 Check (dbo.fn_IsOccupiedByOnlyOne() = 0)
 
@@ -30,7 +30,7 @@ Go
 
 -- Listers cannot list a property as both for sale and for rent.
 
-Create Function fn_IsListedOnlyOnce()
+Create Function fn_IsListedSingleType()
 Returns INT
 As
 Begin
@@ -52,5 +52,5 @@ End
 Go
 
 Alter Table tblProperty
-Add Constraint IsListedOnlyOnce
-Check (dbo.fn_IsListedOnlyOnce() = 0)
+Add Constraint IsListedSingleType
+Check (dbo.fn_IsListedSingleType() = 0)
