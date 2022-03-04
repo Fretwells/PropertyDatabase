@@ -138,7 +138,7 @@ GO
 
 ALTER TABLE tblUSER
 ADD CONSTRAINT ck_no_User_below_18
-CHECK(dbo.fn_No_User_below_18 = 0)
+CHECK(dbo.fn_No_User_below_18() = 0)
 GO
 
 ---Business rule: Users’ monthly income must be larger than the price[Anthony]
@@ -167,7 +167,7 @@ GO
 
 ALTER TABLE tblEVENT
 ADD CONSTRAINT ck_income_LargerThan_Price
-CHECK(dbo.fn_income_LargerThan_Price = 0)
+CHECK(dbo.fn_income_LargerThan_Price() = 0)
 GO
 
 --Create a computed column that calculated The number of properties that a user is listing currently[Anthony]
@@ -189,7 +189,7 @@ GO
 
 ALTER TABLE tblUSER
 ADD CC_count_listing
-AS (dbo.fn_count_listing(EventTypeID))
+AS (dbo.fn_count_listing(E.EventTypeID))
 GO
 
 ---Create a computed column that calculated how many houses is in each neighborhood [Anthony]
@@ -213,7 +213,7 @@ go
 
 ALTER TABLE tblNEIGHBORHOOD
 ADD CC_count_house
-AS (dbo.fn_count_houses_per_neighborhood(PropertyID))
+AS (dbo.fn_count_houses_per_neighborhood(P.PropertyID))
 GO
 
 --Write the SQL query to find all properties that have both cooling and heating system built after 2015[Anthony]
@@ -622,6 +622,12 @@ EXECUTE anthony_insert_Feature
 @FDescr = 'A school providing education between primary school and secondary school.',
 @FTName = 'Proximity'
 go
+
+EXECUTE anthony_insert_Feature
+@FName = 'University',
+@FDescr = 'A eneity that provide college education for pupils age 18 and upwards',
+@FTName = 'Proximity'
+go
  
 
 
@@ -667,20 +673,215 @@ go
 CREATE PROCEDURE anthony_insert_Property_amenity
 @Quant int,
 @PAddress varchar(50),
-@AName VARCHAR(30)
+@AName VARCHAR(30),
+@PZip varchar(9)
+
 AS
 DECLARE @P_ID INT, @A_ID INT
 
 SET @P_ID = (SELECT PropertyID
          FROM tblPROPERTY
-         WHERE PropAdress = @PAddress)
+         WHERE PropAddress = @PAddress
+         AND PropZipCode = @PZip)
 
 SET @A_ID = (SELECT AmenityID
           FROM tblAMENITY
           WHERE AmenityName = @AName)
 
 BEGIN TRANSACTION H1
-INSERT INTO tblPROPERTY_AMENITY(PropertyID, AmenityID, Quantity, PropCity, PropState, PropZipcode, PropBuiltyear)
-VALUES (@N_ID, @PT_ID, @PAdderss, @PCity, @PState, @PZipcode, @PBuiltYear)
+INSERT INTO tblPROPERTY_AMENITY(PropertyID, AmenityID, Quantity)
+VALUES (@P_ID, @A_ID, @Quant)
 COMMIT TRANSACTION H1
+GO
+
+drop procedure anthony_insert_Property_amenity
+go
+
+EXECUTE anthony_insert_Property_amenity
+@Quant = 2,
+@PAddress = '762 Hayes St APT 18',
+@AName = 'Bedroom',
+@PZip = '98109'
+go
+
+EXECUTE anthony_insert_Property_amenity
+@Quant = 1,
+@PAddress = '762 Hayes St APT 18',
+@AName = 'Bathroom',
+@PZip = '98109'
+go
+
+EXECUTE anthony_insert_Property_amenity
+@Quant = 1,
+@PAddress = '762 Hayes St APT 18',
+@AName = 'Garage',
+@PZip = '98109'
+go
+
+EXECUTE anthony_insert_Property_amenity
+@Quant = 1,
+@PAddress = '762 Hayes St APT 18',
+@AName = 'Dishwasher',
+@PZip = '98109'
+go
+
+EXECUTE anthony_insert_Property_amenity
+@Quant = 1,
+@PAddress = '762 Hayes St APT 18',
+@AName = 'Radiant wall heating',
+@PZip = '98109'
+go
+
+EXECUTE anthony_insert_Property_amenity
+@Quant = 2,
+@PAddress = '6224 7th Ave NW',
+@AName = 'Bedroom',
+@PZip = '98107'
+go
+
+EXECUTE anthony_insert_Property_amenity
+@Quant = 1,
+@PAddress = '6224 7th Ave NW',
+@AName = 'Bathroom',
+@PZip = '98107'
+go
+
+EXECUTE anthony_insert_Property_amenity
+@Quant = 1,
+@PAddress = '6224 7th Ave NW',
+@AName = 'Floor mounted air conditioner',
+@PZip = '98107'
+go
+
+EXECUTE anthony_insert_Property_amenity
+@Quant = 1,
+@PAddress = '6224 7th Ave NW',
+@AName = 'Garage',
+@PZip = '98107'
+go
+
+EXECUTE anthony_insert_Property_amenity
+@Quant = 1,
+@PAddress = '6224 7th Ave NW',
+@AName = 'Dishwasher',
+@PZip = '98107'
+go
+
+
+Select * from tblAMENITY
+GO
+
+CREATE PROCEDURE anthony_insert_Property_Feature
+@Quant int,
+@PAddress varchar(50),
+@FName VARCHAR(30),
+@PZip varchar(9)
+
+AS
+DECLARE @P_ID INT, @F_ID INT
+
+SET @P_ID = (SELECT PropertyID
+         FROM tblPROPERTY
+         WHERE PropAddress = @PAddress
+         AND PropZipCode = @PZip)
+
+SET @F_ID = (SELECT FeatureID
+          FROM tblFEATURE
+          WHERE FeatureName = @FName)
+
+BEGIN TRANSACTION H1
+INSERT INTO tblPROPERTY_FEATURE(PropertyID, FeatureID, Quantity)
+VALUES (@P_ID, @F_ID, @Quant)
+COMMIT TRANSACTION H1
+GO
+
+Select * from tblFEATURE
+GO
+Select * from tblPROPERTY_FEATURE
+GO
+
+EXECUTE anthony_insert_Property_Feature
+@Quant = 2,
+@PAddress = '6315 22nd Ave NW #6315',
+@FName = 'Nature park',
+@PZip = '98107'
+GO
+
+EXECUTE anthony_insert_Property_Feature
+@Quant = 1,
+@PAddress = '311 NE 40th St UNIT B',
+@FName = 'University',
+@PZip = '98105'
+GO
+
+EXECUTE anthony_insert_Property_Feature
+@Quant = 1,
+@PAddress = '1121 10th Ave E',
+@FName = 'Botanical garden',
+@PZip = '98102'
+GO
+
+EXECUTE anthony_insert_Property_Feature
+@Quant = 1,
+@PAddress = '1121 10th Ave E',
+@FName = 'High school',
+@PZip = '98102'
+GO
+
+EXECUTE anthony_insert_Property_Feature
+@Quant = 1,
+@PAddress = '3807 S Cloverdale St',
+@FName = 'Carjacking',
+@PZip = '98118'
+GO
+
+
+EXECUTE anthony_insert_Property_Feature
+@Quant = 3,
+@PAddress = '3807 S Cloverdale St',
+@FName = 'parking lot',
+@PZip = '98118'
+GO
+
+
+EXECUTE anthony_insert_Property_Feature
+@Quant = 1,
+@PAddress = '3807 S Cloverdale St',
+@FName = 'Carjacking',
+@PZip = '98118'
+GO
+
+EXECUTE anthony_insert_Property_Feature
+@Quant = 15,
+@PAddress = '1121 10th Ave E',
+@FName = 'Homicide',
+@PZip = '98102'
+GO
+
+EXECUTE anthony_insert_Property_Feature
+@Quant = 27,
+@PAddress = '311 NE 40th St UNIT B',
+@FName = 'Carjacking',
+@PZip = '98105'
+GO
+
+EXECUTE anthony_insert_Property_Feature
+@Quant = 27,
+@PAddress = '311 NE 40th St UNIT B',
+@FName = 'Carjacking',
+@PZip = '98105'
+GO
+
+EXECUTE anthony_insert_Property_Feature
+@Quant = 3,
+@PAddress = '311 NE 40th St UNIT B',
+@FName = 'Burglary',
+@PZip = '98105'
+GO
+
+EXECUTE anthony_insert_Property_Feature
+@Quant = 2,
+@PAddress = '6315 22nd Ave NW #6315',
+@FName = 'Primary School',
+@PZip = '98107'
 GO
