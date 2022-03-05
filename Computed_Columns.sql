@@ -102,3 +102,37 @@ AS (dbo.fn_count_houses_per_neighborhood(P.PropertyID))
 GO
 
 -- William Computed Columns
+-- Create a computed column that calculates how many apartment per neighborhood
+CREATE FUNCTION fn_Calc_NumApartment_PerHood(@PK INT)
+RETURNS INT
+AS
+BEGIN
+
+DECLARE @RET INT = (SELECT COUNT(*) FROM tblPROPERTY P
+                    JOIN tblPROPERTY_TYPE PT ON PT.PropertyTypeID = P.PropertyTypeID
+                    WHERE PT.PropertyTypeName = 'Apartment'
+                    AND NeighborhoodID = @PK)
+RETURN @RET
+END
+GO
+
+ALTER TABLE tblNEIGHBORHOOD
+ADD Calc_NumApartment AS (dbo.fn_Calc_NumApartment_PerHood(NeighborhoodID))
+GO
+
+-- Created a computed column that calculates each user’s age
+CREATE FUNCTION fn_Calc_Age(@PK INT)
+RETURNS INT
+AS
+BEGIN
+
+DECLARE @RET INT = (SELECT DATEDIFF(YEAR, BirthDate , GETDATE())
+                    FROM tblUSER
+                    WHERE UserID = @PK)
+RETURN @RET
+END
+GO
+
+ALTER TABLE tblUSER
+ADD Calc_Age AS (dbo.fn_Calc_Age(UserID))
+GO

@@ -51,3 +51,38 @@ ORDER BY AVG(U.MonthlyIncome)
 GO -- could also use some help
 
 -- William Complex Queries
+-- Write the SQL query to find how many apartments in each neighborhood have parking spaces.
+SELECT COUNT(P.PropertyID) AS Num_Apartment, N.NeighborhoodName
+FROM tblPROPERTY P
+JOIN tblNEIGHBORHOOD N ON N.NeighborhoodID = P.NeighborhoodID
+JOIN tblPROPERTY_TYPE PT ON PT.PropertyTypeID = P.PropertyTypeID
+JOIN tblPROPERTY_FEATURE PF ON P.PropertyID = PF.PropertyID
+JOIN tblFEATURE F ON F.FeatureID = PF.FeatureID
+JOIN tblFEATURE_TYPE FT ON FT.FeatureTypeID = F.FeatureTypeID
+WHERE PT.PropertyTypeName = 'Apartment'
+AND F.FeatureName = 'Garage'
+AND PF.Quantity IS NOT NULL OR PF.Quantity <> 0
+GROUP BY N.NeighborhoodName
+GO
+
+-- Write the SQL query to find the properties that are hottest(has most reviews) in each neighborhood
+SELECT A.PropertyID, A.NeighborhoodName, A.NumReview
+FROM
+(SELECT P.PropertyID, N.NeighborhoodName, COUNT(R.ReviewID) AS NumReview
+    FROM tblPROPERTY P
+    JOIN tblPROPERTY_USER PU ON P.PropertyID = PU.PropertyID
+    JOIN tblEVENT E ON PU.PropertyUserID = E.PropertyUserID
+    JOIN tblREVIEW R ON E.EventID = R.EventID
+    JOIN tblNEIGHBORHOOD N ON N.NeighborhoodID = P.NeighborhoodID
+    GROUP BY P.PropertyID, N.NeighborhoodName) A,
+(SELECT top 1 NeighborhoodName, COUNT(R.ReviewID) AS NumReview
+    FROM tblPROPERTY P
+    JOIN tblNEIGHBORHOOD N ON N.NeighborhoodID = P.NeighborhoodID
+    JOIN tblPROPERTY_USER PU ON P.PropertyID = PU.PropertyID
+    JOIN tblEVENT E ON PU.PropertyUserID = E.PropertyUserID
+    JOIN tblREVIEW R ON E.EventID = R.EventID
+    GROUP BY NeighborhoodName
+    ORDER BY COUNT(R.ReviewID) DESC) B
+WHERE A.NeighborhoodName = B.NeighborhoodName
+AND A.NumReview = B.NumReview
+

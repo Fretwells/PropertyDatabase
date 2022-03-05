@@ -114,4 +114,52 @@ CHECK(dbo.fn_income_LargerThan_Price() = 0)
 GO
 
 -- William Business Rules
+--User below the age of 21 cannot buy property that is over 1M dollars
+CREATE FUNCTION dbo.fn_NoKids_BuyMansion()
+RETURNS INT
+AS
+BEGIN
+
+DECLARE @RET INT = 0
+IF EXISTS (SELECT * FROM tblEvent E
+            JOIN tblEVENT_TYPE ET ON ET.EventTypeID = E.EventTypeID
+            JOIN tblPROPERTY_USER PU ON PU.PropertyUserID = E.PropertyUserID
+            JOIN tblUSER U ON U.UserID = PU.UserID
+            WHERE U.BirthDate > DateAdd(Year, -21, GetDate())
+            AND ET.EventTypeID = 'Purchase property'
+            AND E.Price > 1000000)
+BEGIN
+    SET @RET = 1
+END
+RETURN @RET
+END
+GO
+
+ALTER TABLE tblEVENT
+ADD CONSTRAINT CK_NoKids_BuyMansion
+CHECK (dbo.fn_NoKids_BuyMansion() = 0)
+GO
+-- A property above 300 years are not valid to be listed
+
+CREATE FUNCTION fn_NoAncientBuilding()
+RETURNS INT
+AS
+BEGIN
+
+DECLARE @RET INT = 0
+IF EXISTS (SELECT * FROM tblPROPERTY
+            WHERE YEAR(GetDate()) - PropBuiltYear >= 300  )
+BEGIN
+    SET @RET = 1
+END
+RETURN @RET
+END
+GO
+
+ALTER TABLE tblPROPERTY
+ADD CONSTRAINT CK_NoAncientBuilding
+CHECK (dbo.fn_NoAncientBuilding() = 0)
+GO
+
+
 
