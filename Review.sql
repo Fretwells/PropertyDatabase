@@ -33,7 +33,7 @@ Go
 Exec sf_Insert_Review
   @Content = 'Great Purchase. I love the house',
   @ReviewDate = '2020-01-01',
-  @Stars = 5 ,
+  @Stars = 5,
   @UserEmail = 'ww@uw.edu',
   @PropAddress = '911 N 95th St 909',
   @PropCity = 'Seattle',
@@ -43,7 +43,7 @@ Exec sf_Insert_Review
 Exec sf_Insert_Review
   @Content = 'Fantastic property. The lowest price I ever seen',
   @ReviewDate = '2015-01-01',
-  @Stars = 5 ,
+  @Stars = 5,
   @UserEmail = 'Tom@gmail.com',
   @PropAddress = '3807 S Cloverdale St',
   @PropCity = 'Seattle',
@@ -53,7 +53,7 @@ Exec sf_Insert_Review
 Exec sf_Insert_Review
   @Content = 'A bit expensive',
   @ReviewDate = '2018-01-01',
-  @Stars = 5 ,
+  @Stars = 5,
   @UserEmail = 'CC@gmail.com',
   @PropAddress = '762 Hayes St APT 18',
   @PropCity = 'Seattle',
@@ -63,7 +63,7 @@ Exec sf_Insert_Review
 Exec sf_Insert_Review
   @Content = 'not a bad rent',
   @ReviewDate = '2020-01-01',
-  @Stars = 5 ,
+  @Stars = 5,
   @UserEmail = 'Poor@gmail.com',
   @PropAddress = '11348 Durland Ave NE',
   @PropCity = 'Seattle',
@@ -73,7 +73,7 @@ Exec sf_Insert_Review
 Exec sf_Insert_Review
   @Content = 'Bad price',
   @ReviewDate = '2019-01-02',
-  @Stars = 1 ,
+  @Stars = 1,
   @UserEmail = 'CC@gmail.com',
   @PropAddress = '6224 7th Ave NW',
   @PropCity = 'Seattle',
