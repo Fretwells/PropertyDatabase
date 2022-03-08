@@ -30,6 +30,8 @@ Commit Transaction T1
 
 Go
 
+Delete From tblREVIEW
+
 Exec sf_Insert_Review
   @Content = 'Great Purchase. I love the house',
   @ReviewDate = '2020-01-01',
@@ -39,7 +41,7 @@ Exec sf_Insert_Review
   @PropCity = 'Seattle',
   @EventName = 'Purchase property',
   @EventDate = '2020-01-01'
-  
+
 Exec sf_Insert_Review
   @Content = 'Fantastic property. The lowest price I ever seen',
   @ReviewDate = '2015-01-01',
@@ -49,7 +51,7 @@ Exec sf_Insert_Review
   @PropCity = 'Seattle',
   @EventName = 'Purchase property',
   @EventDate = '2015-01-01'
-  
+
 Exec sf_Insert_Review
   @Content = 'A bit expensive',
   @ReviewDate = '2018-01-01',
@@ -59,7 +61,7 @@ Exec sf_Insert_Review
   @PropCity = 'Seattle',
   @EventName = 'Purchase property',
   @EventDate = '2018-01-01'
-  
+
 Exec sf_Insert_Review
   @Content = 'not a bad rent',
   @ReviewDate = '2020-01-01',
@@ -69,7 +71,7 @@ Exec sf_Insert_Review
   @PropCity = 'Seattle',
   @EventName = 'Rent property',
   @EventDate = '2020-01-01'
-  
+
 Exec sf_Insert_Review
   @Content = 'Bad price',
   @ReviewDate = '2019-01-02',
@@ -79,3 +81,5 @@ Exec sf_Insert_Review
   @PropCity = 'Seattle',
   @EventName = 'Purchase Property',
   @EventDate = '2019-01-02'
+
+Select * From tblREVIEW
