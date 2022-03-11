@@ -103,3 +103,21 @@ EXEC ww_Insert_Event
 @P = 1000000,
 @E_Date = '2019-01-02'
 GO
+
+Exec dbo.ww_Insert_Event
+  "MJ@gmail.com",
+  "1090 E Watertower St #150, Meridian, ID 83642",
+  "Meridian",
+  "Purchase property",
+  150000,
+  "2022-03-02"
+Go
+
+Exec dbo.ww_Insert_Event
+  "Poor@gmail.com",
+  "201 Municipal Dr, Nampa, ID 83687",
+  "Nampa",
+  "Purchase property",
+  15000,
+  "2021-03-02"
+Go

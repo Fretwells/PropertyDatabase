@@ -95,3 +95,37 @@ EXECUTE anthony_insert_Property_amenity
 @PZip = '98107'
 go
 
+Exec dbo.anthony_insert_Property_amenity
+  2,
+  "1090 E Watertower St #150, Meridian, ID 83642",
+  "Bathroom",
+  "83642"
+Go
+
+Exec dbo.anthony_insert_Property_amenity
+  1,
+  "1090 E Watertower St #150, Meridian, ID 83642",
+  "Dishwasher",
+  "83642"
+Go
+
+Exec dbo.anthony_insert_Property_amenity
+  4,
+  "1090 E Watertower St #150, Meridian, ID 83642",
+  "Bedroom",
+  "83642"
+Go
+
+Exec dbo.anthony_insert_Property_amenity
+  1,
+  "201 Municipal Dr, Nampa, ID 83687",
+  "Lawn",
+  "83687"
+Go
+
+Exec dbo.anthony_insert_Property_amenity
+  1,
+  "201 Municipal Dr, Nampa, ID 83687",
+  "Bedroom",
+  "83687"
+Go
