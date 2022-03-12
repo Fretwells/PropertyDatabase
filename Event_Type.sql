@@ -29,6 +29,10 @@ EXECUTE anthony_insert_eventType
 @EvtName = 'List for purchase',
 @EvtDescr = 'The property is listed for purchasing.'
 
+EXECUTE anthony_insert_eventType
+@EvtName = 'List for rent',
+@EvtDescr = 'The property is listed for renting.'
+
 Select *
 from tblEVENT_TYPE
 go
