@@ -12,9 +12,10 @@ Group By ET.EventTypeID, ET.EventTypeName
 
 Select * From tblUser
 
--- Write the SQL query to find every purchase made by users who were born after 1978
+-- Write the SQL query to find every purchase made by users who were born after 1978 and have made at least three purchases before the age of 40
 
-Select P.PropertyID, P.PropAddress
+Select qryA.PropertyID, qryA.PropAddress
+
 From tblPROPERTY P
   Join tblPROPERTY_USER PU On PU.PropertyID = P.PropertyID
   Join tblUSER U On U.UserID = PU.UserID
