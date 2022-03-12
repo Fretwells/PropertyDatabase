@@ -123,6 +123,26 @@ EXECUTE anthony_insert_Property
 @PTName = 'Single Family'
 GO
 
+Exec dbo.anthony_insert_Property
+  "201 Municipal Dr, Nampa, ID 83687",
+  "Nampa",
+  "ID",
+  "83687",
+  "2005",
+  "Ada",
+  "Mobile Home"
+Go
+
+Exec dbo.anthony_insert_Property
+  "1090 E Watertower St #150, Meridian, ID 83642",
+  "Meridian",
+  "ID",
+  "83642",
+  "1990",
+  "Ada",
+  "Townhouse"
+Go
+
 DELETE FROM tblPROPERTY WHERE PropertyID = 77
 go
 

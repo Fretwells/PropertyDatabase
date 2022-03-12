@@ -69,3 +69,19 @@ EXECUTE ww_Insert_Property_User
 @B_Date = '2019-01-02',
 @E_Date = NULL
 GO
+
+Exec dbo.ww_Insert_Property_User
+  "1090 E Watertower St #150, Meridian, ID 83642",
+  "Meridian",
+  "MJ@gmail.com",
+  "2022-03-02",
+  "2023-03-02"
+Go
+
+Exec dbo.ww_Insert_Property_User
+  "201 Municipal Dr, Nampa, ID 83687",
+  "Nampa",
+  "Poor@gmail.com",
+  "2021-03-02",
+  "2023-03-02"
+Go

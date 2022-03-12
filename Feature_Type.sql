@@ -1,4 +1,4 @@
-Create Procedure usp_insertFeatureType
+Create Procedure sf_insertFeatureType
   @name VarChar(30),
   @descr VarChar(500)
 As
@@ -9,25 +9,27 @@ Values (@name, @descr)
 Commit Transaction
 End
 
+Go
+
 Delete From tblFEATURE_TYPE
 
-Exec usp_insertFeatureType
+Exec sf_insertFeatureType
   "Proximity",
   "Denotes a building or attraction that is close to the property"
 
-Exec usp_insertFeatureType
+Exec sf_insertFeatureType
   "Security",
   "A community security enhancement"
 
-Exec usp_insertFeatureType
+Exec sf_insertFeatureType
   "Shared Space",
   "A space shared between community members"
 
-Exec usp_insertFeatureType
+Exec sf_insertFeatureType
   "Crime",
   "A crime that has occurred near the property"
 
-Exec usp_insertFeatureType
+Exec sf_insertFeatureType
   "Nature",
   "The type of flora or fauna present in the community"
 

@@ -1,80 +1,85 @@
-CREATE PROCEDURE sf_Insert_Review
-@Con varchar(500),
-@Date Date,
-@S_Rate INT,
-@U_Email varchar(50),
-@P_Add varchar(50),
-@P_City varchar(50),
-@E_Date Date,
-@E_Name varchar(50)
+Create Procedure sf_Insert_Review
+  @Content VARCHAR(500),
+  @ReviewDate DATE,
+  @Stars INT,
+  @UserEmail VARCHAR(50),
+  @PropAddress VARCHAR(50),
+  @PropCity VARCHAR(50),
+  @EventName VARCHAR(50),
+  @EventDate DATE
+As
 
+Declare @E_ID INT = (
+  Select EventID
+  From tblEVENT E
+    Join tblPROPERTY_USER PU On PU.PropertyUserID = E.PropertyUserID
+    Join tblEVENT_TYPE ET On ET.EventTypeID = E.EventTypeID
+    Join tblUSER U On U.UserID = PU.UserID
+    Join tblPROPERTY P On P.PropertyID = PU.PropertyID
+  Where U.UserEmail = @UserEmail
+    And P.PropAddress = @PropAddress
+    And P.PropCity = @PropCity
+    And E.EventDate = @EventDate
+    And ET.EventTypeName = @EventName
+)
 
-AS
+Begin Transaction T1
+Insert Into tblREVIEW (EventID, Content, [Date], StarRating)
+Values (@E_ID, @Content, @ReviewDate, @Stars)
+Commit Transaction T1
 
-DECLARE @E_ID INT = (SELECT EventID FROM tblEVENT E
-                JOIN tblPROPERTY_USER PU ON PU.PropertyUserID = E.PropertyUserID
-                JOIN tblEVENT_TYPE ET ON ET.EventTypeID = E.EventTypeID
-                JOIN tblUSER U ON U.UserID = PU.UserID
-                JOIN tblPROPERTY P ON P.PropertyID = PU.PropertyID
-                    WHERE U.UserEmail = @U_Email
-                    AND P.PropAddress = @P_Add
-                    AND P.PropCity = @P_City
-                    AND E.EventDate = @E_Date
-                    AND ET.EventTypeName = @E_Name)
+Go
 
-BEGIN TRANSACTION T1
-INSERT INTO tblREVIEW (EventID, Content, Date, StarRating)
-VALUES
-(@E_ID, @Con, @Date, @S_Rate)
-COMMIT TRANSACTION T1
-GO
+Delete From tblREVIEW
 
-EXEC sf_Insert_Review
-@Con = 'Great Purchase. I love the house',
-@Date = '2020-01-01',
-@S_Rate = 5 ,
-@U_Email = 'ww@uw.edu',
-@P_Add = '911 N 95th St 909',
-@P_City = 'Seattle',
-@E_Name = 'Purchase property',
-@E_Date = '2020-01-01'
+Exec sf_Insert_Review
+  @Content = 'Great Purchase. I love the house',
+  @ReviewDate = '2020-01-01',
+  @Stars = 5,
+  @UserEmail = 'ww@uw.edu',
+  @PropAddress = '911 N 95th St 909',
+  @PropCity = 'Seattle',
+  @EventName = 'Purchase property',
+  @EventDate = '2020-01-01'
 
-EXEC sf_Insert_Review
-@Con = 'Fantastic property. The lowest price I ever seen',
-@Date = '2015-01-01',
-@S_Rate = 5 ,
-@P_Add = '3807 S Cloverdale St',
-@P_City = 'Seattle',
-@U_Email = 'Tom@gmail.com',
-@E_Name = 'Purchase property',
-@E_Date = '2015-01-01'
+Exec sf_Insert_Review
+  @Content = 'Fantastic property. The lowest price I ever seen',
+  @ReviewDate = '2015-01-01',
+  @Stars = 5,
+  @UserEmail = 'Tom@gmail.com',
+  @PropAddress = '3807 S Cloverdale St',
+  @PropCity = 'Seattle',
+  @EventName = 'Purchase property',
+  @EventDate = '2015-01-01'
 
-EXEC sf_Insert_Review
-@Con = 'A bit expensive',
-@Date = '2018-01-01',
-@S_Rate = 5 ,
-@P_City = 'Seattle',
-@U_Email = 'CC@gmail.com',
-@E_Name = 'Purchase property',
-@P_Add = '762 Hayes St APT 18',
-@E_Date = '2018-01-01'
+Exec sf_Insert_Review
+  @Content = 'A bit expensive',
+  @ReviewDate = '2018-01-01',
+  @Stars = 5,
+  @UserEmail = 'CC@gmail.com',
+  @PropAddress = '762 Hayes St APT 18',
+  @PropCity = 'Seattle',
+  @EventName = 'Purchase property',
+  @EventDate = '2018-01-01'
 
-EXEC sf_Insert_Review
-@Con = 'not a bad rent',
-@Date = '2020-01-01',
-@S_Rate = 5 ,
-@P_Add = '11348 Durland Ave NE',
-@P_City = 'Seattle',
-@U_Email = 'Poor@gmail.com',
-@E_Name = 'Rent property',
-@E_Date = '2020-01-01'
+Exec sf_Insert_Review
+  @Content = 'not a bad rent',
+  @ReviewDate = '2020-01-01',
+  @Stars = 5,
+  @UserEmail = 'Poor@gmail.com',
+  @PropAddress = '11348 Durland Ave NE',
+  @PropCity = 'Seattle',
+  @EventName = 'Rent property',
+  @EventDate = '2020-01-01'
 
-EXEC sf_Insert_Review
-@Con = 'Bad price',
-@Date = '2019-01-02',
-@S_Rate = 1 ,
-@P_Add = '6224 7th Ave NW',
-@P_City = 'Seattle',
-@U_Email = 'CC@gmail.com',
-@E_Name = 'Purchase Property',
-@E_Date = '2019-01-02'
+Exec sf_Insert_Review
+  @Content = 'Bad price',
+  @ReviewDate = '2019-01-02',
+  @Stars = 1,
+  @UserEmail = 'CC@gmail.com',
+  @PropAddress = '6224 7th Ave NW',
+  @PropCity = 'Seattle',
+  @EventName = 'Purchase Property',
+  @EventDate = '2019-01-02'
+
+Select * From tblREVIEW
