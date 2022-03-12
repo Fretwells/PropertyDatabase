@@ -10,9 +10,9 @@ AS
 DECLARE @PU_ID INT = (SELECT PropertyUserID FROM tblPROPERTY_USER PU
                     JOIN tblUSER U ON PU.UserID = U.UserID
                     JOIN tblPROPERTY P ON P.PropertyID = PU.PropertyID
-                    WHERE U.UserEmail = 'CC@gmail.com'
-                    AND P.PropAddress = '762 Hayes St APT 18'
-                    AND P.PropCity = 'Seattle'),
+                    WHERE U.UserEmail = @U_Email
+                    AND P.PropAddress = @P_Add
+                    AND P.PropCity = @P_City),
 
         @ET_ID INT = (SELECT EventTypeID FROM tblEVENT_TYPE
                     WHERE EventTypeName = @ET_Name)
